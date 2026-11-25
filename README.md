@@ -2,7 +2,7 @@
 
 Host a prediction market for your friends, club, or community. Set up your site, make it your own in Admin, and trade on your own questions with virtual credits.
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https%3A%2F%2Fgithub.com%2FKalebChristian%2FBlue-Market)
+[Docker](#docker) · [Render](#render) · [Node.js and Pterodactyl](#nodejs-and-pterodactyl)
 
 ![Blue Market home with market cards and a featured price chart](docs/screenshots/markets.jpg)
 
@@ -18,13 +18,28 @@ Host a prediction market for your friends, club, or community. Set up your site,
 
 ## Installation
 
-| Platform | Requirements |
-| --- | --- |
-| Render | A paid web service with persistent storage |
-| Docker | A machine running Docker |
-| Node.js or Pterodactyl | Node.js 24 |
+### Docker
 
-See the [deployment guide](docs/deployment.md) for Docker, Render, and Pterodactyl instructions. After startup, open the app and create your admin account using the setup code in the server logs.
+Extract the repository ZIP or clone the repository, then run these commands in its folder:
+
+```sh
+docker build -t blue-market .
+docker run --name blue-market -p 3000:3000 -v blue-market-data:/data blue-market
+```
+
+Open [http://localhost:3000](http://localhost:3000). The volume keeps your markets and accounts when the container is replaced.
+
+### Render
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https%3A%2F%2Fgithub.com%2FKalebChristian%2FBlue-Market)
+
+Requires a paid web service with persistent storage.
+
+### Node.js and Pterodactyl
+
+Run `node server.js` with Node.js 24. On Pterodactyl, set `server.js` as the startup file and open the assigned address.
+
+After startup, create your admin account with the setup code from the server logs. See the [deployment guide](docs/deployment.md) for setup, configuration, and backups.
 
 ## Screenshots
 
