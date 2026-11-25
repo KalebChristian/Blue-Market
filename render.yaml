@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: blue-market
+    runtime: docker
+    plan: starter
+    autoDeployTrigger: off
+    disk:
+      name: blue-market-data
+      mountPath: /data
+      sizeGB: 1
