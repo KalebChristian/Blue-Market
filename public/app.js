@@ -242,7 +242,7 @@ function eventPage({item,history,positions}) {
     '</div><aside class="panel ticket">'+(settled?settlementPanel(item,positions):trade?'<div class="trade-tabs"><button type="button" data-side="buy">Buy</button><button type="button" data-side="sell">Sell</button></div>'+
       '<form class="form-panel" id="order">'+select('Outcome','outcome',item.labels.map((name,i)=>[String(i),name]),String(index))+
       inp('Shares','shares',sell?Math.max(1,Math.min(500,positions.find(row=>row.outcome===index)?.shares||1)):10,'number','required min="1" max="500"')+
-      '<div class="quote" id="quote"></div>'+btn('Place Trade')+message+'</form>':open&&app.showcase?'<div class="form-panel"><h2>Showcase</h2><p>'+(app.hostedDemo?'Enter the Demo to Try Trading.':'Trading Is Available in a Self-Hosted Instance.')+'</p></div>':open?'<div class="form-panel"><h2>Trade</h2><a class="btn primary" href="/sign-in">Sign In to Trade</a></div>':
+      '<div class="quote" id="quote"></div>'+btn('Place Trade')+message+'</form>':open&&app.showcase?'<div class="form-panel"><h2>Market Details</h2><p>Closes '+h(date(item.closes))+'</p></div>':open?'<div class="form-panel"><h2>Trade</h2><a class="btn primary" href="/sign-in">Sign In to Trade</a></div>':
       '<div class="form-panel"><h2>'+(item.archived?'Archived':statusNames[item.status])+'</h2><p>Trading Is Closed.</p></div>')+'</aside></div>';
   const plot=document.querySelector('#history');
   drawMarketChart(plot,item,history);
@@ -633,7 +633,7 @@ async function admin() {
   });
 }
 function demoEntry() {
-  main.insertAdjacentHTML('afterbegin','<form class="demo-entry" id="demo"><span>Explore With a Sample Account.</span>'+btn('Enter the Demo')+message+'</form>');
+  main.insertAdjacentHTML('afterbegin','<form class="demo-entry" id="demo">'+btn('Enter the Demo')+message+'</form>');
   bind(document.querySelector('#demo'),async()=>{await api('/demo',{});location.assign('/');});
 }
 async function start() {
@@ -663,7 +663,6 @@ async function start() {
   if(!app.user&&!app.cfg.browse)return auth(false);
   if(path.startsWith('/market/'))return eventPage(await api(path));
   feed(await api('/feed'));
-  if(app.showcase&&!app.hostedDemo) main.insertAdjacentHTML('afterbegin','<p class="demo-entry">Read-Only Showcase With Sample Data</p>');
   if(!app.user&&(app.demo||app.hostedDemo)) demoEntry();
 }
 start().catch(error=>{main.innerHTML='<section class="panel empty">'+title('Unable to Open This Page',error.message)+'<a class="btn" href="/">Back to Markets</a></section>';});
